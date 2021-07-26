@@ -434,12 +434,13 @@ function translateQuery(uri: string, doc: Document, schema: GraphQLSchema, verb:
 
   function encoderForInputType(depth: number, type: GraphQLType, isNonNull?: boolean, path?: string): string {
     let encoder: string;
-    let value = path;
+    let pathNormalized = path.replace(/\.type$/g, '.type_')
+    let value = pathNormalized;
     let isMaybe = false
     if (type instanceof GraphQLNonNull) {
       type = type['ofType'];
     } else {
-      isMaybe = true;    
+      isMaybe = true;
       value = `o${depth}`;
     }
     if (type instanceof GraphQLInputObjectType) {
@@ -472,7 +473,7 @@ function translateQuery(uri: string, doc: Document, schema: GraphQLSchema, verb:
       throw new Error('not implemented: ' + type.constructor.name);
     }
     if (isMaybe) {
-      encoder = `(maybeEncode (\\o${depth} -> ` + encoder + ') '+ path + ')';
+      encoder = `(maybeEncode (\\o${depth} -> ` + encoder + ') '+ pathNormalized + ')';
     }
     return encoder;
   }
