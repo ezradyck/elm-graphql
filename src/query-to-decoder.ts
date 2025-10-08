@@ -247,7 +247,7 @@ export function decoderFor(def: OperationDefinition | FragmentDefinition, info: 
         right = '(' + prefix + right + '))';
 
         if (!isMaybe) {
-          left = '(map (Maybe.withDefualt []) ' + left;
+          left = '(map (Maybe.withDefault []) ' + left;
           right = right + ')';
         }
       } else if (isMaybe) {
